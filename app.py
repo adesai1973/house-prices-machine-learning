@@ -1,7 +1,14 @@
-# 1. import Flask
-from flask import Flask, render_template, redirect, jsonify
+# 1. import
+from flask import Flask, render_template, redirect, jsonify, request
+import numpy as np
 # 2. Create an app, being sure to pass __name__
 app = Flask(__name__)
+
+# Load the model
+import tensorflow
+from tensorflow import keras
+from tensorflow.keras.models import load_model
+model = load_model("housing_model.h5", compile = False)
 
 
 from sqlalchemy import create_engine
@@ -89,6 +96,59 @@ def index():
 def introduction():
     # Return the template
     return render_template('introduction.html')
+
+@app.route('/plot1')
+def plot1():
+    # Return the template
+    return render_template('plot1.html')
+
+@app.route('/predict1')
+def predict1():
+    # Return the template
+    return render_template('predict.html')
+
+@app.route('/predict',methods=['POST'])
+def predict():
+
+    int_features = [int(x) for x in request.form.values()]
+    final_features = []
+    print(int_features)
+    #   sold_price,bathroom_ct,bedroom_ct,home_sqft,zipcode,Population,Median Age,
+    #   Household Income,Per Capita Income,Poverty Rate,Population 25 and Over,
+    #   Rate 25 and Over w/ less than 1st grade,Rate 25 and Over w/ Some or Completed Elementary School,
+    #   Rate 25 and Over w/ Some or Completed Middle School,Rate 25 and Over w/ Some High School,
+    #   Rate 25 and Over w/ Completed High School or Equivalent,
+    #   "Rate 25 and Over w/ Some college, less than 1 year","Rate 25 and Over w/ Some college, 1 or more years",
+    #   Rate 25 and Over w/ Associate's degree,Rate 25 and Over w/ Bachelor's degree,
+    #   Rate 25 and Over w/ Master's degree,Rate 25 and Over w/ Professional school degree,
+    #   Rate 25 and Over w/ Doctorate degree
+    zip_census_items = [19605, 39.2, 109750, 41426,	0.026472839, 12873,	0.017478443, 0.001475957,	
+                        0.002252777, 0.150858386, 0.071001321, 0.184960771, 0.084284937, 0.317563893,
+                        0.133069215, 0.022217043, 0.014837256, 0.022217043, 0.014837256]
+    int_features.pop(3)
+    int_features.extend(zip_census_items)
+    
+    for feature in int_features:
+        final_features.append([feature])
+    
+    final_features = np.array(final_features)
+    print(final_features.shape)
+    print(final_features)
+
+    prediction = model.predict(final_features)
+
+    output = round(prediction[0], 2)
+
+    return render_template('predict.html', prediction_text='Predicted House Price: $ {}'.format(output))
+
+@app.route('/results',methods=['POST'])
+def results():
+
+    data = request.get_json(force=True)
+    prediction = model.predict([np.array(list(data.values()))])
+
+    output = prediction[0]
+    return jsonify(output)
 
 # @app.route('/top10us_data')
 # def top10us_data():

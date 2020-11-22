@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>House Pricing Model</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+<link href="http://getbootstrap.com/docs/4.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <!-- Favicons -->
+<link rel="apple-touch-icon" href="http://getbootstrap.com/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="http://getbootstrap.com/docs/4.5/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="http://getbootstrap.com/docs/4.5/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="http://getbootstrap.com/docs/4.5/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="http://getbootstrap.com/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+<link rel="icon" href="http://getbootstrap.com/docs/4.5/assets/img/favicons/favicon.ico">
+<meta name="msapplication-config" content="http://getbootstrap.com/docs/4.5/assets/img/favicons/browserconfig.xml">
+<meta name="theme-color" content="#563d7c">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="./static/css/dashboard.css" >
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='./static/css/dashboard.css') }}" > -->
+  </head>
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-info flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/">HomePredict</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <!--<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="#">Help</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <span data-feather="home"></span>
+              HomeDash <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="introduction">
+              <span data-feather="file"></span>
+              Introduction 
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="predict1">
+              <span data-feather="shopping-cart"></span>
+              Predict
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="users"></span>
+              Model
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="plot1">
+              <span data-feather="bar-chart-2"></span>
+              Visualization 1
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="layers"></span>
+              Visualization 2
+            </a>
+          </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Data</span>
+          <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+            <span data-feather="plus-circle"></span>
+          </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Scrape
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Data Table 1
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Data Table 2
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Credits
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!--sold_price,bathroom_ct,bedroom_ct,home_sqft,zipcode,Population,Median Age,
+      Household Income,Per Capita Income,Poverty Rate,Population 25 and Over,
+      Rate 25 and Over w/ less than 1st grade,Rate 25 and Over w/ Some or Completed Elementary School,
+      Rate 25 and Over w/ Some or Completed Middle School,Rate 25 and Over w/ Some High School,
+      Rate 25 and Over w/ Completed High School or Equivalent,
+      "Rate 25 and Over w/ Some college, less than 1 year","Rate 25 and Over w/ Some college, 1 or more years",
+      Rate 25 and Over w/ Associate's degree,Rate 25 and Over w/ Bachelor's degree,
+      Rate 25 and Over w/ Master's degree,Rate 25 and Over w/ Professional school degree,
+      Rate 25 and Over w/ Doctorate degree-->
+
+    <div class="login col-md-12 ml-sm-auto col-lg-10 px-md-4">
+      <h1 class="h2 text-muted">Enter your house parameters:</h1>
+    <form action="{{ url_for('predict') }}"method="post">
+      <input type="text" name="Square Footage" placeholder="Square Footage" required="required" />
+      <input type="text" name="Bedrooms" placeholder="Bedrooms" required="required" />
+      <input type="text" name="Bathrooms" placeholder="Bathrooms" required="required" />
+      <input type="text" name="ZIP Code" placeholder="ZIP Code" required="required" />
+      <br>
+      <button type="submit" class="btn btn-primary btn-block btn-large">Predict House Price</button>
+    </form>
+    </div>
+
+    <main role="main" class="col-md-12 ml-sm-auto col-lg-10 px-md-4">
+    </main>
+
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="http://getbootstrap.com/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')
+      </script>
+      <script src="http://getbootstrap.com/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+        <script src="./static/js/dashboard.js"></script></body>
+</html>
