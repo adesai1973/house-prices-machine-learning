@@ -1,6 +1,7 @@
 # 1. import
 from flask import Flask, render_template, redirect, jsonify, request
 import numpy as np
+import pandas as pd
 # 2. Create an app, being sure to pass __name__
 app = Flask(__name__)
 
@@ -8,8 +9,10 @@ app = Flask(__name__)
 import tensorflow
 from tensorflow import keras
 from tensorflow.keras.models import load_model
-model = load_model("housing_model.h5", compile = False)
 
+
+#model = keras.models.load_model("housing_model.h5")
+model = keras.models.load_model("housing_model.h5", compile = False)
 
 from sqlalchemy import create_engine
 import psycopg2
@@ -67,24 +70,6 @@ cursor = connection.cursor()
 # cursor.execute(sql2, ("COAL","%(Shutdown)"))
 # coal_tables = cursor.fetchall()
 
-# cursor.execute(sql2, ("GAS","%(Decommissioned)"))
-# gas_tables = cursor.fetchall()
-
-# cursor.execute(sql2, ("OIL","%(Shutdown)"))
-# oil_tables = cursor.fetchall()
-
-# cursor.execute(sql2, ("HYDRO","%(Shutdown)"))
-# hydro_tables = cursor.fetchall()
-
-# cursor.execute(sql2, ("NUCLEAR","%(Shutdown)"))
-# nuclear_tables = cursor.fetchall()
-
-# cursor.execute(sql2, ("WIND","%(Shutdown)"))
-# wind_tables = cursor.fetchall()
-
-# cursor.execute(sql2, ("SOLAR_PV","%(Shutdown)"))
-# solar_tables = cursor.fetchall()
-
 
 # Set routes
 @app.route('/')
@@ -96,6 +81,11 @@ def index():
 def introduction():
     # Return the template
     return render_template('introduction.html')
+
+@app.route('/model')
+def model():
+    # Return the template
+    return render_template('model.html')
 
 @app.route('/plot1')
 def plot1():
@@ -124,7 +114,7 @@ def predict():
     #   Rate 25 and Over w/ Doctorate degree
     zip_census_items = [19605, 39.2, 109750, 41426,	0.026472839, 12873,	0.017478443, 0.001475957,	
                         0.002252777, 0.150858386, 0.071001321, 0.184960771, 0.084284937, 0.317563893,
-                        0.133069215, 0.022217043, 0.014837256, 0.022217043, 0.014837256]
+                        0.133069215, 0.022217043, 0.014837256, 0.022217043]
     int_features.pop(3)
     int_features.extend(zip_census_items)
     
@@ -135,7 +125,12 @@ def predict():
     print(final_features.shape)
     print(final_features)
 
-    prediction = model.predict(final_features)
+    #df_features = pd.DataFrame(int_features) 
+
+    new_df = pd.read_csv('random_sample_noprice.csv') 
+    print(new_df)
+
+    prediction = model.predict(new_df)
 
     output = round(prediction[0], 2)
 
@@ -160,140 +155,20 @@ def results():
 #     # Return the template with the teams list passed in
 #     return jsonify(top10USrecords)
 
-# @app.route('/topusplanttype_data')
-# def topusplanttype_data():
-#     # Return the template with the teams list passed in
-#     return render_template('topusplanttype.html', top10Rec=topUSPlantTypeRec)
-
-# @app.route('/topusplanttype_api')
-# def topusplanttype_api():
-#     # Return the template with the teams list passed in
-#     return jsonify(topUSPlantTypeRec)
-
-# @app.route('/topworld_data')
-# def topworld_data():
-#     # Return the template with the teams list passed in
-#     return render_template('topworld.html', top10Rec=topWorldRec)
-
-# @app.route('/topworld_api')
-# def topworld_api():
-#     # Return the template with the teams list passed in
-#     return jsonify(topWorldRec)
-
-# @app.route('/country_data')
-# def country_data():
-#     # Return the template with the teams list passed in
-#     return render_template('country.html', top10Rec=countryRec)
-
-# @app.route('/country_api')
-# def country_api():
-#     # Return the template with the teams list passed in
-#     return jsonify(countryRec)
-  
-# @app.route('/consumption')
-# def consumption():
-#     # Return the template
-#     return render_template('consumption.html')   
-
-# @app.route('/production')
-# def production():
-#     # Return the template
-#     return render_template('production.html')
-
-# @app.route('/consumption2')
-# def production2():
-#     # Return the template
-#     return render_template('consumption2.html')
-
-# @app.route('/datasources')
-# def datasources():
-#     # Return the template
-#     return render_template('datasources.html')
-
-# @app.route('/fundamentals')
-# def fundamentals():
-#     # Return the template
-#     return render_template('fundamentals.html')
-
-# @app.route('/fundamentals_raw')
-# def fundamentals_raw():
-#     # Return the template
-#     return render_template('fundamentals_raw.html')
-
 # @app.route('/csvdata1')
 # def csvdata1():
 #     # Return the template
 #     return render_template('data/global-primary-energy.csv')
-
-# @app.route('/csvdata2')
-# def csvdata2():
-#     # Return the template
-#     return render_template('data/primary-energy-consumption-by-region.csv')
-
-# @app.route('/csvdata3')
-# def csvdata3():
-#     # Return the template
-#     return render_template('data/primary-energy-consumption-by-source.csv')
-
-# @app.route('/csvdata4')
-# def csvdata4():
-#     # Return the template
-#     return render_template('data/per-capita-energy-use.csv')
-
-# @app.route('/csvdata5')
-# def csvdata5():
-#     # Return the template
-#     return render_template('data/countries.json')
 
 # @app.route('/map_data')
 # def map_data():
 #     # Return the template
 #     return render_template('data/world-power-plants-list.geojson')
 
-# @app.route('/map_raw')
-# def map_raw():
-#     # Return the template
-#     return render_template('map_raw.html')
-
 # @app.route('/map')
 # def map():
 #     # Return the template
 #     return render_template('map.html')
-
-# @app.route('/coal')
-# def coal():
-#     # Return the template with the teams list passed in
-#     return render_template('coal.html', output_data=coal_tables)
-
-# @app.route('/gas')
-# def gas():
-#     # Return the template with the teams list passed in
-#     return render_template('gas.html', output_data=gas_tables)
-
-# @app.route('/oil')
-# def oil():
-#     # Return the template with the teams list passed in
-#     return render_template('oil.html', output_data=oil_tables)
-
-# @app.route('/hydro')
-# def hydro():
-#     # Return the template with the teams list passed in
-#     return render_template('hydro.html', output_data=hydro_tables)
-
-# @app.route('/nuclear')
-# def nuclear():
-#     # Return the template with the teams list passed in
-#     return render_template('nuclear.html', output_data=nuclear_tables)
-
-# @app.route('/wind')
-# def wind():
-#     # Return the template with the teams list passed in
-#     return render_template('wind.html', output_data=wind_tables)
-
-# @app.route('/solar')
-# def solar():
-#     # Return the template with the teams list passed in
-#     return render_template('solar.html', output_data=solar_tables)
 
 
 

@@ -46,16 +46,16 @@ body {
 
 .sidebar .nav-link {
   font-weight: 500;
-  color: #553;
+  color: rgb(50, 50, 30);
 }
 
 .sidebar .nav-link .feather {
   margin-right: 4px;
-  color: #991;
+  color: rgb(80, 80, 8);
 }
 
 .sidebar .nav-link.active {
-  color: #9b8f02;
+  color: #433d01;
 }
 
 .sidebar .nav-link:hover .feather,
